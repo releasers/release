@@ -3,6 +3,13 @@
 .*
 # except for .gitignore
 !.gitignore
+!.bowerrc
+
+node_modules
+components
+public/javascripts/vendors
+public/stylesheets/fonts/fontawesome
+public/stylesheets/main.css
 
 # Ignore Play! working directory #
 db

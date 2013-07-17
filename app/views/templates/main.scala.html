@@ -1,0 +1,44 @@
+@()
+
+@import play.api.Play
+@import play.api.Play.current
+@import models.Configuration
+
+@defining(Configuration(Play.application.configuration)) { conf =>
+
+<!DOCTYPE html>
+
+<html data-ng-app="app">
+    <head>
+      <title>Release</title>
+      <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+
+      @if(Play.isProd) {
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/" + conf.styleName + "." + conf.version + ".min.css")">
+      } else {
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+      }
+    </head>
+    <body>
+      <div id="view" ui-view></div>
+
+      @if(Play.isProd) {
+        <script src="@routes.Assets.at("javascripts/" + conf.scriptName + "." + conf.version + ".min.js")" type="text/javascript"></script>
+        <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+      } else {
+        <script src="@routes.Assets.at("javascripts/vendors/jquery/jquery.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/lodash/lodash.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/angular/angular.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/angular/angular-resource.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/angular-ui/router/angular-ui-router.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/angular-ui/utils/ui-utils.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/angular-ui/bootstrap/ui-bootstrap-tpls.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/restangular/restangular.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendors/angular-http-auth/http-auth-interceptor.js")" type="text/javascript"></script>
+
+        <script src="@routes.Assets.at("javascripts/app.js")" type="text/javascript"></script>
+      }
+    </body>
+</html>
+
+}

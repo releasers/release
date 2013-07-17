@@ -1,0 +1,33 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                        controllers.Application.main(url = "whatever")
+
+# Template views
+GET     /views/index                             controllers.Application.index
+
+# API
+POST    /api/login                               controllers.Application.login
+POST    /api/logout                              controllers.Application.logout
+
+->      /api/users                               controllers.Users
+#GET     /api/users/:idUser/books
+#POST    /api/users/:idUser/books
+#GET     /api/users/:idUser/books/:idBook
+#PUT     /api/users/:idUser/books/:idBook
+#DELETE  /api/users/:idUser/books/:idBook
+#GET     /api/users/:idUser/suggestions
+#POST    /api/users/:idUser/suggestions
+#GET     /api/users/:idUser/comments
+
+->      /api/books                               controllers.Books
+#GET     /api/books/:idBook/comments              controllers.Books.
+#POST    /api/books/:idBook/comments
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                            controllers.Assets.at(path="/public", file)
+
+GET     /*url                                    controllers.Application.main(url: String)
