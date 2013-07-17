@@ -9,9 +9,10 @@ Read, learn and share books to unleash a storm of knowledge.
 
 - Install `grunt`: `npm install -g grunt-cli`
 - Install `bower`: `npm install -g bower` (require version 0.10 or 1.0)
-- Require Play! 2.1.1
+- Require Play! 2.1.2
 - Using MongoDB 2.4.5 (might work on older versions)
 - Require ReactiveMongo 0.9
+- Require Bower 0.10
 
 ### Run project ###
 
