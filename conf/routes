@@ -8,6 +8,10 @@ GET     /                                        controllers.Application.main(ur
 # Template views
 GET     /views/index                             controllers.Application.index
 
+GET     /oauth2callback                          controllers.Authentication.oauth2callback
+GET     /login                                   controllers.Authentication.login
+GET     /logout                                  controllers.Authentication.logout
+
 # API
 POST    /api/login                               controllers.Application.login
 POST    /api/logout                              controllers.Application.logout
