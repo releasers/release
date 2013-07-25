@@ -7,10 +7,10 @@ GET     /                                        controllers.Application.main(ur
 
 # Template views
 GET     /views/index                             controllers.Application.index
-
-GET     /oauth2callback                          controllers.Authentication.oauth2callback
-GET     /login                                   controllers.Authentication.login
-GET     /logout                                  controllers.Authentication.logout
+GET     /views/users/list                        controllers.Users.list
+GET     /views/users/detail                      controllers.Users.detail
+GET     /views/books/list                        controllers.Books.list
+GET     /views/books/detail                      controllers.Books.detail
 
 # API
 POST    /api/login                               controllers.Authentication.login

@@ -7,6 +7,7 @@
 
 node_modules
 components
+conf/local.conf
 public/javascripts/vendors
 public/stylesheets/fonts/fontawesome
 public/stylesheets/main.css

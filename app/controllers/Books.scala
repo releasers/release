@@ -16,4 +16,20 @@ import models.Book
 
 object Books extends AuthenticatedController[Book] {
   val collectionName = "books"
+
+  def list = Action {
+    Ok(views.html.books.books())
+  }
+
+  def detail = Action {
+    Ok(views.html.books.book())
+  }
+
+  def comment = {
+    // Add a comment to the book
+  }
+
+  def rate = {
+    // rate a book from 0 to 5
+  }
 }

@@ -28,9 +28,10 @@ case class Profile(
   locale: Option[String]
 )
 
-case class User(
+case class User (
   _id: BSONObjectID,
   profile: Profile
+  //racks: Seq[Rack]
 ) {
   lazy val id = _id.stringify
 }

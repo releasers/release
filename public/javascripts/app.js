@@ -19,6 +19,26 @@ var app = angular.module("app",
       .state("index", {
         url: "/",
         templateUrl: "/views/index"
+      })
+      .state("users", {
+        url: "/users",
+        controller: "UsersCtrl",
+        templateUrl: "/views/users/list"
+      })
+      .state("user", {
+        url: "/users/{id}",
+        controller: "UserCtrl",
+        templateUrl: "/views/users/detail"
+      })
+      .state("books", {
+        url: "/books",
+        controller: "BooksCtrl",
+        templateUrl: "/views/books/list"
+      })
+      .state("book", {
+        url: "/books/{id}",
+        controller: "BookCtrl",
+        templateUrl: "/views/books/detail"
       });
 
       $urlRouterProvider.otherwise("/");
