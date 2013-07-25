@@ -13,8 +13,9 @@ GET     /login                                   controllers.Authentication.logi
 GET     /logout                                  controllers.Authentication.logout
 
 # API
-POST    /api/login                               controllers.Application.login
-POST    /api/logout                              controllers.Application.logout
+POST    /api/login                               controllers.Authentication.login
+POST    /api/logout                              controllers.Authentication.logout
+GET     /api/oauth2callback                      controllers.Authentication.oauth2callback
 
 ->      /api/users                               controllers.Users
 #GET     /api/users/:idUser/books
