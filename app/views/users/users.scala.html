@@ -1,6 +1,13 @@
 @()
 
 <h1>List of users</h1>
+Search: <input type="search" ng-model="query">
+Sort by:
+<select ng-model="orderProp">
+  <option value="profile.name">Name</option>
+  <option value="profile.email">Email</option>
+  <option value="profile.birthday">Birthday</option>
+</select>
 <table>
   <thead>
     <tr>
@@ -13,7 +20,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="user in users">
+    <tr ng-repeat="user in users | filter : query | orderBy:orderProp">
         <td><a href="{{user.profile.link}}">{{user.profile.name}}</a></td>
         <td><a href="mailto:{{user.profile.email}}">{{user.profile.email}}</a></td>
         <td>{{user.profile.verifiedEmail}}</td>

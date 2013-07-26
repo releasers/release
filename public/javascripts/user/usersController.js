@@ -6,8 +6,10 @@ app.controller("UsersCtrl", ["$scope", function ($scope) {
               name : "Benoit Orihuela", link : "https://plus.google.com/107176102057999375218", 
               gender : "male", birthday : "1976-01-23", locale : "fr"}},
         { _id : "002", profile : 
-            { id : "002", email : "pdi@zenexity.com", verifiedEmail : "true", 
-              name : "Paul Dijou", link : "https://plus.google.com/002", 
+            { id : "002", email : "aaa@zenexity.com", verifiedEmail : "true", 
+              name : "Aaaaaa Dijou", link : "https://plus.google.com/002", 
               gender : "male", birthday : "1986-01-23", locale : "fr"}}
     ]
+
+    $scope.orderProp = 'profile.name';
 }]);
