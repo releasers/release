@@ -2,6 +2,10 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import openlibrary.OpenLibrary
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.json.Json
 
 object Application extends Controller with Authentication {
 
@@ -19,6 +23,15 @@ object Application extends Controller with Authentication {
 
   def logout = Action {
     Ok("").withNewSession
+  }
+
+  def openLibraryInfo(isbn: String) = Action {
+    Async {
+      OpenLibrary.bookInfo(isbn) map {
+        case Some(book) => Ok(Json.toJson(book))
+        case None => NotFound
+      }
+    }
   }
 
 }

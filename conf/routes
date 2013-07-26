@@ -32,6 +32,8 @@ GET     /api/oauth2callback                      controllers.Authentication.oaut
 #GET     /api/books/:idBook/comments              controllers.Books.
 #POST    /api/books/:idBook/comments
 
+# Test urls
+GET     /test/openlibrary/:isbn                  controllers.Application.openLibraryInfo(isbn)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                            controllers.Assets.at(path="/public", file)
