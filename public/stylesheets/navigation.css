@@ -21,6 +21,7 @@ ol#navigation {
   padding: 0;
   width: 75px;
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
 }
 
 ol#navigation li {
@@ -81,7 +82,6 @@ ol#navigation li.search form {
   position: absolute;
   top: 0;
   width: 21em;
-  z-index: 1;
 }
 
 ol#navigation li.search:hover form {
