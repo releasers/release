@@ -25,15 +25,12 @@ object Users extends AuthenticatedController[User] {
     Ok(views.html.users.user())
   }
 
-  val borrowReader: Reads[(String, String)] = (
-    (__ \ 'isbn).read[String] and
-    (__ \ 'targetUserId).read[String]
-  ) tupled
-  def borrow = AuthenticatedAction { implicit request => implicit user =>
+  val borrowReader: Reads[String] = (__ \ 'isbn).read[String]
+  def borrow(targetUserId: String) = AuthenticatedAction { implicit request => implicit user =>
     request.body.asJson match {
       case Some(json) =>
         borrowReader.reads(json) match {
-          case JsSuccess((isbn, targetUserId), _) =>
+          case JsSuccess(isbn, _) =>
             Async {
               user.borrowToUser(isbn, targetUserId).map { _ =>
                 Ok("")
@@ -47,15 +44,12 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
-  val loanReader: Reads[(String, String)] = (
-    (__ \ 'isbn).read[String] and
-    (__ \ 'targetUserId).read[String]
-  ) tupled
-  def loan = AuthenticatedAction { implicit request => implicit user =>
+  val loanReader: Reads[String] = (__ \ 'isbn).read[String]
+  def loan(targetUserId: String) = AuthenticatedAction { implicit request => implicit user =>
     request.body.asJson match {
       case Some(json) =>
         borrowReader.reads(json) match {
-          case JsSuccess((isbn, targetUserId), _) =>
+          case JsSuccess(isbn, _) =>
             Async {
               user.borrowFromUser(isbn, targetUserId).map { _ =>
                 Ok("")
@@ -69,15 +63,12 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
-  val renderReader: Reads[(String, String)] = (
-    (__ \ 'isbn).read[String] and
-    (__ \ 'targetUserId).read[String]
-  ) tupled
-  def render = AuthenticatedAction { implicit request => implicit user =>
+  val renderReader: Reads[String] = (__ \ 'isbn).read[String]
+  def render(targetUserId: String) = AuthenticatedAction { implicit request => implicit user =>
     request.body.asJson match {
       case Some(json) =>
         renderReader.reads(json) match {
-          case JsSuccess((isbn,targetUserId), _) =>
+          case JsSuccess(isbn, _) =>
             Async {
               user.renderToUser(isbn, targetUserId).map { _ =>
                 Ok("")

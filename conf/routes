@@ -27,6 +27,9 @@ GET     /api/oauth2callback                      controllers.Authentication.oaut
 #GET     /api/users/:idUser/suggestions
 #POST    /api/users/:idUser/suggestions
 #GET     /api/users/:idUser/comments
+POST     /api/user/:idUser/borrow                controllers.Users.borrow(idUser)
+POST     /api/user/:idUser/render                controllers.Users.render(idUser)
+POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
 
 ->      /api/books                               controllers.Books
 #GET     /api/books/:idBook/comments              controllers.Books.
