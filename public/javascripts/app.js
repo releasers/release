@@ -4,13 +4,13 @@ var app = angular.module("app",
     apiUrl: "http://localhost:9000\\:9000/api"
   })
   .constant("Events", {
-    
+
   })
   .config(["RestangularProvider", function (RestangularProvider) {
     "use strict";
     RestangularProvider.setBaseUrl('/api');
   }])
-  .config(["$locationProvider", "$stateProvider", "$urlRouterProvider", 
+  .config(["$locationProvider", "$stateProvider", "$urlRouterProvider",
     function ($locationProvider, $stateProvider, $urlRouterProvider) {
     "use strict";
     $locationProvider.html5Mode(true).hashPrefix("!");
@@ -31,7 +31,7 @@ var app = angular.module("app",
         templateUrl: "/views/users/detail"
       })
       .state("books", {
-        url: "/books",
+        url: "/books?pattern",
         controller: "BooksCtrl",
         templateUrl: "/views/books/list"
       })
@@ -50,4 +50,12 @@ var app = angular.module("app",
       $rootScope.$location = $location;
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
+
+      $rootScope.globalSearch = {}
+      if($stateParams.pattern) {
+        $rootScope.globalSearch.pattern = $stateParams.pattern
+      }
+      $rootScope.search = function() {
+        $location.path("/books").search("pattern", $rootScope.globalSearch.pattern)
+      };
   }]);

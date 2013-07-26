@@ -5,12 +5,16 @@ import play.api.Play.current
 import reactivemongo.api._
 import reactivemongo.bson._
 import reactivemongo.api.collections.default.BSONCollection
+import reactivemongo.core.commands.LastError
 import play.modules.reactivemongo._
 import play.modules.reactivemongo.json.BSONFormats._
 import play.modules.reactivemongo.json.collection.JSONCollection
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.joda.time.DateTime
+
+case class BorrowException(msg: String) extends Throwable(msg)
+case class RenderException(msg: String) extends Throwable(msg)
 
 case class Profile(
   id: String,
@@ -27,8 +31,28 @@ case class Profile(
 
 case class Loanable(
   isbn: String,
-  borrower: Option[BSONObjectID],
+  addedDate: DateTime,
+  borrowerId: Option[BSONObjectID],
   borrowedSince: Option[DateTime])
+
+case class SuggestionVote(
+  who: BSONObjectID,
+  when: DateTime)
+
+object SuggestionVote {
+  implicit val formater = Json.format[SuggestionVote]
+}
+
+case class Suggestion(
+  isbn: String,
+  addedDate: DateTime,
+  origin: BSONObjectID,
+  approved: Seq[SuggestionVote],
+  disapproved: Seq[SuggestionVote])
+
+object Suggestion {
+  implicit val formater = Json.format[Suggestion]
+}
 
 object Loanable {
   implicit val formater = Json.format[Loanable]
@@ -37,9 +61,85 @@ object Loanable {
 case class User(
     _id: BSONObjectID,
     profile: Profile,
-    books: Seq[Loanable]
-    ) {
+    suggestions: Seq[Suggestion],
+    books: Seq[Loanable],
+    queue: Seq[Loanable]) {
   lazy val id = _id.stringify
+
+  def borrowFromUser(isbn: String, byUserId: String): Future[LastError] = {
+    borrowFromUser(isbn, BSONObjectID(byUserId))
+  }
+  def borrowFromUser(isbn: String, byUserId: BSONObjectID): Future[LastError] = {
+    var success = false  // local var to make code readable
+    var seen = false
+    val updated = books.map { book =>
+      if (success) book
+      else if (book.isbn != isbn) book
+      else {
+        seen = true
+        if (book.borrowerId.isEmpty) {
+          success = true
+          book.copy(borrowerId = Some(byUserId), borrowedSince = Some(DateTime.now))
+        }
+        else book
+      }
+    }
+    if (success) {
+      import Loanable.formater
+      User.collection.update(
+        Json.obj("_id" -> _id),
+        Json.obj("$set" -> Json.obj("books" -> updated))
+      )
+    }
+    else {
+      val msg = if (seen) s"Book '$isbn' is not available"
+                else s"Requested user doesn have the book '$isbn'"
+      Future.failed(BorrowException(msg))
+    }
+  }
+
+  def borrowToUser(isbn: String, targetUserId: String): Future[LastError] = {
+    User.findById(targetUserId).flatMap {
+      case Some(targetUser) => targetUser.borrowFromUser(isbn, _id)
+      case None =>
+        Future.failed(BorrowException(s"Can't borrow to not-existing user: $targetUserId"))
+    }
+  }
+
+def renderFromUser(isbn: String, byUserId: BSONObjectID): Future[LastError] = {
+    var success = false  // local var to make code readable
+    var seen = false
+    val updated = books.map { book =>
+      if (success) book
+      else if (book.isbn != isbn) book
+      else if (book.borrowerId != Some(byUserId)) book
+      else {
+        success = true
+        book.copy(borrowerId = None, borrowedSince = None)
+      }
+    }
+    if (success) {
+      import Loanable.formater
+      // prepare to send an alert if queue isn't empty
+      User.collection.update(
+        Json.obj("_id" -> _id),
+        Json.obj("$set" -> Json.obj("books" -> updated))
+      )
+    }
+    else {
+      val msg = s"Can't render the book '$isbn'"
+      Future.failed(RenderException(msg))
+    }
+  }
+
+
+  def renderToUser(isbn: String, targetUserId: String): Future[LastError] = {
+    User.findById(targetUserId).flatMap {
+      case Some(targetUser) => targetUser.renderFromUser(isbn, _id)
+      case None =>
+        Future.failed(RenderException(s"Can't render to not-existing user: $targetUserId"))
+    }
+  }
 }
 
 object User {
@@ -51,19 +151,23 @@ object User {
   val collectionName = "users"
   val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
 
+  def findById(id: String): Future[Option[User]] = {
+    collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[User].headOption
+  }
+
   def findByProfileId(id: String): Future[Option[User]] = {
     collection.find(BSONDocument("profile.id" -> id)).cursor[User].headOption
   }
 
-  def fromSession(id: String): Future[Option[User]] = {
-    collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[User].headOption
-  }
+  def fromSession(id: String): Future[Option[User]] = findById(id)
 
   def create(profile: Profile) = {
     User(
       _id = BSONObjectID.generate,
       profile = profile,
-      books = Nil)
+      suggestions = Nil,
+      books = Nil,
+      queue = Nil)
   }
 
   def createOrMerge(profile: Profile): Future[User] = {
@@ -76,4 +180,5 @@ object User {
         collection.insert(user).map(_ => user)
     }
   }
+
 }

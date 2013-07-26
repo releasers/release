@@ -1,12 +1,23 @@
 package models
 
-import play.api.libs.json._
-import reactivemongo.bson.BSONBinary
-import reactivemongo.core.netty.ChannelBufferReadableBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import reactivemongo.bson.buffer.ReadableBuffer
+import play.api.libs.json._
+import play.api.Play.current
+import play.modules.reactivemongo._
+import play.modules.reactivemongo.json.BSONFormats._
+import play.modules.reactivemongo.json.collection.JSONCollection
+import reactivemongo.api._
+import reactivemongo.api.collections.default.BSONCollection
+import reactivemongo.bson.BSONBinary
 import reactivemongo.bson.Subtype
+import reactivemongo.bson.BSONObjectID
+import reactivemongo.bson.BSONDocument
+import reactivemongo.bson.buffer.ReadableBuffer
 import reactivemongo.bson.utils.Converters.{hex2Str, str2Hex}
+import reactivemongo.core.commands.LastError
+import reactivemongo.core.netty.ChannelBufferReadableBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent._
 
 case class Book (
   _id: String,
@@ -18,21 +29,15 @@ case class Book (
   @inline def isbn = _id
 }
 
-object Book { 
-  
-  implicit object binaryFormater extends Format[BSONBinary] {
-    def reads(json: JsValue): JsResult[BSONBinary] =
-      json match {
-        case JsString(str) => JsSuccess(BSONBinary(
-          str2Hex(str),
-          Subtype.GenericBinarySubtype
-        ))
-        case _ => JsError("expected string for binary")
-      }
-
-    def writes(bin: BSONBinary): JsValue =
-      JsString(hex2Str(bin.value.readArray(bin.value.readable)))
-  }
+object Book {
 
   implicit val formater = Json.format[Book]
+
+  val collectionName = "books"
+  val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
+
+  def findById(id: String): Future[Option[User]] = {
+    collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[User].headOption
+  }
+
 }

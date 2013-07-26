@@ -1,4 +1,7 @@
 app.factory("Books", ["Restangular", function (Restangular) {
+  function search(pattern) {
+    return Restangular.one("test/openlibrary", "ISBN:" + pattern).doGET()
+  }
 
   function list () {
 
@@ -10,7 +13,7 @@ app.factory("Books", ["Restangular", function (Restangular) {
 
   return {
     list: list,
-    findById: findById
+    findById: findById,
+    search: search
   }
-
 }]);
