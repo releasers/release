@@ -47,6 +47,28 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
+  val loanReader: Reads[(String, String)] = (
+    (__ \ 'isbn).read[String] and
+    (__ \ 'targetUserId).read[String]
+  ) tupled
+  def loan = AuthenticatedAction { implicit request => implicit user =>
+    request.body.asJson match {
+      case Some(json) =>
+        borrowReader.reads(json) match {
+          case JsSuccess((isbn, targetUserId), _) =>
+            Async {
+              user.borrowFromUser(isbn, targetUserId).map { _ =>
+                Ok("")
+              }.recover {
+                case BorrowException(msg) => BadRequest(msg)
+              }
+            }
+          case JsError(errors) => BadRequest(s"Bad content: $errors")
+        }
+      case None => BadRequest("Missing content")
+    }
+  }
+
   val renderReader: Reads[(String, String)] = (
     (__ \ 'isbn).read[String] and
     (__ \ 'targetUserId).read[String]

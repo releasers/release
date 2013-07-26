@@ -66,7 +66,10 @@ case class User(
     queue: Seq[Loanable]) {
   lazy val id = _id.stringify
 
-  def borrowFromUser(isbn: String, byUser: User): Future[LastError] = {
+  def borrowFromUser(isbn: String, byUserId: String): Future[LastError] = {
+    borrowFromUser(isbn, BSONObjectID(byUserId))
+  }
+  def borrowFromUser(isbn: String, byUserId: BSONObjectID): Future[LastError] = {
     var success = false  // local var to make code readable
     var seen = false
     val updated = books.map { book =>
@@ -76,7 +79,7 @@ case class User(
         seen = true
         if (book.borrowerId.isEmpty) {
           success = true
-          book.copy(borrowerId = Some(byUser._id), borrowedSince = Some(DateTime.now))
+          book.copy(borrowerId = Some(byUserId), borrowedSince = Some(DateTime.now))
         }
         else book
       }
@@ -97,19 +100,19 @@ case class User(
 
   def borrowToUser(isbn: String, targetUserId: String): Future[LastError] = {
     User.findById(targetUserId).flatMap {
-      case Some(targetUser) => targetUser.borrowFromUser(isbn, this)
+      case Some(targetUser) => targetUser.borrowFromUser(isbn, _id)
       case None =>
         Future.failed(BorrowException(s"Can't borrow to not-existing user: $targetUserId"))
     }
   }
 
-def renderFromUser(isbn: String, byUser: User): Future[LastError] = {
+def renderFromUser(isbn: String, byUserId: BSONObjectID): Future[LastError] = {
     var success = false  // local var to make code readable
     var seen = false
     val updated = books.map { book =>
       if (success) book
       else if (book.isbn != isbn) book
-      else if (book.borrowerId != Some(byUser._id)) book
+      else if (book.borrowerId != Some(byUserId)) book
       else {
         success = true
         book.copy(borrowerId = None, borrowedSince = None)
@@ -132,7 +135,7 @@ def renderFromUser(isbn: String, byUser: User): Future[LastError] = {
 
   def renderToUser(isbn: String, targetUserId: String): Future[LastError] = {
     User.findById(targetUserId).flatMap {
-      case Some(targetUser) => targetUser.renderFromUser(isbn, this)
+      case Some(targetUser) => targetUser.renderFromUser(isbn, _id)
       case None =>
         Future.failed(RenderException(s"Can't render to not-existing user: $targetUserId"))
     }
