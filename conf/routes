@@ -38,6 +38,7 @@ GET     /api/books/:isbn                         controllers.Books.findByIsbn(is
 ->      /api/books                               controllers.Books
 GET     /api/books/:idBook/comments              controllers.Books.getComments(idBook)
 POST    /api/books/:idBook/comments              controllers.Books.addComment(idBook)
+POST    /api/books                               controllers.Books.addBook
 
 # Analytics (Data visualization)
 GET     /views/analytics                         controllers.Analytics.main

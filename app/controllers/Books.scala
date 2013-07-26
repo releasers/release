@@ -78,4 +78,23 @@ object Books extends AuthenticatedController[Book] {
       }
     }
   }
+
+  // Add a book to the collection
+  def addBook() = Authenticated { user =>
+    Action { request =>
+      request.body.asJson.map { json =>
+        json.validate[Book] match {
+          case JsSuccess(book, _) =>
+            Async(coll.insert(book).map(_ => Ok).recover {
+              case e: Throwable => BadRequest(e.getMessage)
+            })
+          case JsError(e) =>
+            val errors = e.flatMap(_._2)
+            BadRequest(errors.toString)
+        }
+
+      }
+      Ok
+    }
+  }
 }
