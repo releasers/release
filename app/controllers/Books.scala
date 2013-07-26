@@ -85,7 +85,7 @@ object Books extends AuthenticatedController[Book] {
       request.body.asJson.map { json =>
         json.validate[Book] match {
           case JsSuccess(book, _) =>
-            Async(coll.insert(book).map(_ => Ok).recover {
+            Async(Book.create(json.as[JsObject]).map(_ => Ok).recover {
               case e: Throwable => BadRequest(e.getMessage)
             })
           case JsError(e) =>

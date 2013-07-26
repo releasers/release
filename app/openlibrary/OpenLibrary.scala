@@ -55,7 +55,7 @@ object OpenLibrary {
       "jscmd" -> "data"
     ).get().map(_.json.as[Map[String, OLBook]])
 
-  def bookSearch(pattern: String)(implicit ec: ExecutionContext): Future[List[JsValue]] =
+  def bookSearch(pattern: String)(implicit ec: ExecutionContext): Future[List[JsObject]] =
     WS.url("http://openlibrary.org/search.json").withQueryString("q" -> pattern).get.map(_.json).map { json =>
       val docs = (json \ "docs").as[JsArray]
 
@@ -66,9 +66,9 @@ object OpenLibrary {
         (maybeIsbn, maybeTitle, maybeAuthor) match {
           case (Some(isbn), Some(title), Some(author)) => Some(Json.obj(
             "isbn" -> isbn,
-            "titre" -> title,
-            "resume" -> author,
-            "imageUrl" -> s"http://covers.openlibrary.org/b/isbn/$isbn-M.jpg"
+            "title" -> title,
+            "description" -> author,
+            "pictureUrl" -> s"http://covers.openlibrary.org/b/isbn/$isbn-M.jpg"
           ))
           case _ => None
         }

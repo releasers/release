@@ -24,7 +24,8 @@ case class Book (
   comments: Seq[Comment],
   title: String,
   description: String,
-  picture: Option[BSONBinary]
+  picture: Option[BSONBinary],
+  pictureUrl: Option[String]
 ) {
   @inline def isbn = _id
 }
@@ -46,6 +47,13 @@ object Book {
 
   def findAllByIsbns(isbns: Seq[String]): Future[Seq[Book]] = {
     collection.find(BSONDocument("_id" -> BSONDocument("$in" -> isbns))).cursor[Book].toList
+  }
+
+  def create(book: JsObject) = {
+    collection.insert(book ++ Json.obj(
+      "_id" -> (book \ "isbn"),
+      "comments" -> Json.arr()
+    ))
   }
 
 }

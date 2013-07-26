@@ -29,11 +29,11 @@ GET     /api/users/:idUser/loans                 controllers.Users.listLoans(idU
 #GET     /api/users/:idUser/suggestions
 #POST    /api/users/:idUser/suggestions
 #GET     /api/users/:idUser/comments
-POST     /api/user/:idUser/borrow                controllers.Users.borrow(idUser)
-POST     /api/user/:idUser/render                controllers.Users.render(idUser)
-POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
-POST     /api/user/book                          controllers.Users.addBook
-DELETE   /api/user/book/:isbn                    controllers.Users.removeBook(isbn)
+POST     /api/users/:idUser/borrow                controllers.Users.borrow(idUser)
+POST     /api/users/:idUser/render                controllers.Users.render(idUser)
+POST     /api/users/:idUser/loan                  controllers.Users.loan(idUser)
+POST     /api/users/book                          controllers.Users.addBook
+DELETE   /api/users/book/:isbn                    controllers.Users.removeBook(isbn)
 
 GET     /api/books/:isbn                         controllers.Books.findByIsbn(isbn)
 POST    /api/books                               controllers.Books.addBook

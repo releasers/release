@@ -9,6 +9,8 @@ import play.api.libs.json._
 import play.api.cache.Cached
 import play.api.Play.current
 
+import models.Book
+
 object Application extends Controller with Authentication {
 
   def main(url: String) = AuthenticatedAction { implicit request => implicit user =>
@@ -40,6 +42,11 @@ object Application extends Controller with Authentication {
     Action {
       Async {
         OpenLibrary.bookSearch(pattern) map { books =>
+
+          books.foreach { book =>
+            Book.create(book)
+          }
+
           Ok(Json.toJson(books.take(10)))
         }
       }

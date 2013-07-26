@@ -5,17 +5,17 @@
     <tr>
       <th>Titre</th>
       <th>ISBN</th>
-      <th>Résumé</th>
+      <th>Autheur</th>
       <th>Image</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="book in books">
-      <td><a ng-href="/book/{{book.isbn}}">{{book.titre}}</a></td>
+      <td><a ng-href="/books/{{book.isbn}}">{{book.title}}</a></td>
       <td>{{book.isbn}}</td>
-      <td>{{book.resume}}</td>
-      <td><img ng-src="{{book.imageUrl}}"></td>
+      <td>{{book.description}}</td>
+      <td><img ng-src="{{book.pictureUrl}}"></td>
       <th>
         <a ng-href="/books/{{book.isbn}}/users">Emprunter</a>
         <button ng-click="add(book.isbn)">Ajouter</button>

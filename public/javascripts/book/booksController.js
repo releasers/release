@@ -6,6 +6,7 @@ app.controller("BooksCtrl", ["$scope", "$location", "$stateParams", "Books", fun
   }
 
   $scope.add = function(isbn) {
-    alert(isbn)
+    console.log("Add " + isbn);
+    booksService.add(isbn);
   }
 }]);
