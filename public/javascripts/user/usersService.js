@@ -1,7 +1,7 @@
 app.factory("Users", ["Restangular", function (Restangular) {
 
   function list () {
-
+    return Restangular.all("users").getList()
   }
 
   function findById(userId) {
