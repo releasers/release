@@ -30,6 +30,7 @@ GET     /api/users/:idUser/books                 controllers.Users.listBooks(idU
 POST     /api/user/:idUser/borrow                controllers.Users.borrow(idUser)
 POST     /api/user/:idUser/render                controllers.Users.render(idUser)
 POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
+POST     /api/user/book                          controllers.Users.addBook
 
 ->      /api/books                               controllers.Books
 #GET     /api/books/:idBook/comments              controllers.Books.

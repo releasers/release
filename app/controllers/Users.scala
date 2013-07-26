@@ -90,4 +90,26 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
+  val addBookReader: Reads[(String,Int)] = (
+    (__ \ 'isbn).read[String] and
+    (__ \ 'number).read[Int]
+  ).tupled
+  def addBook() = AuthenticatedAction { implicit request => implicit user =>
+     request.body.asJson match {
+      case Some(json) =>
+        addBookReader.reads(json) match {
+          case JsSuccess((isbn, number), _) =>
+            Async {
+              user.addBook(isbn, number).map { _ =>
+                Ok("")
+              }.recover {
+                case AddBookException(msg) => BadRequest(msg)
+              }
+            }
+          case JsError(errors) => BadRequest(s"Bad content: $errors")
+        }
+      case None => BadRequest("Missing content")
+    }
+  }
+
 }

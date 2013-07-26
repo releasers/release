@@ -15,6 +15,7 @@ import org.joda.time.DateTime
 
 case class BorrowException(msg: String) extends Throwable(msg)
 case class RenderException(msg: String) extends Throwable(msg)
+case class AddBookException(msg: String) extends Throwable(msg)
 
 case class Profile(
   id: String,
@@ -138,6 +139,21 @@ def renderFromUser(isbn: String, byUserId: BSONObjectID): Future[LastError] = {
       case Some(targetUser) => targetUser.renderFromUser(isbn, _id)
       case None =>
         Future.failed(RenderException(s"Can't render to not-existing user: $targetUserId"))
+    }
+  }
+
+  def addBook(isbn: String, number: Int) : Future[LastError] = {  
+    if(number < 1) Future.failed(AddBookException(s"Number ':number' must be >1"))
+    else {
+      val updated = books ++ {
+        for(i <- 1 to number) yield {
+          Loanable(isbn, DateTime.now, None, None)
+        }
+      }
+      User.collection.update(
+          Json.obj("_id" -> _id),
+          Json.obj("$set" -> Json.obj("books" -> updated))
+        ) 
     }
   }
 }
