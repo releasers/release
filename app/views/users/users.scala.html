@@ -2,6 +2,7 @@
 
 <h1>List of users</h1>
 <table>
+  <thead>
     <tr>
         <th>Name</th>
         <th>Email</th>
@@ -10,6 +11,8 @@
         <th>Birthday</th>
         <th>Locale</th>
     </tr>
+  </thead>
+  <tbody>
     <tr ng-repeat="user in users">
         <td><a href="{{user.profile.link}}">{{user.profile.name}}</a></td>
         <td><a href="mailto:{{user.profile.email}}">{{user.profile.email}}</a></td>
@@ -18,5 +21,5 @@
         <td>{{user.profile.birthday | date}}</td>
         <td>{{user.profile.locale | uppercase}}</td>
     </tr>
-  </li>
+  </tdody>
 </table>
