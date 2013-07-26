@@ -12,7 +12,7 @@ import play.api.libs.functional.syntax._
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.autosource.reactivemongo._
 
-import models.User
+import models._
 
 object Users extends AuthenticatedController[User] {
   val collectionName = "users"
@@ -25,13 +25,26 @@ object Users extends AuthenticatedController[User] {
     Ok(views.html.users.user())
   }
 
-
-  def borrow = {
-    // if remaining create a loan
-    // else add to queue
-    // val to: User
-    // val from: Rack
-    // val howMany: Int
+  val borrowReader: Reads[(String, String)] = (
+    (__ \ 'isbn).read[String] and
+    (__ \ 'targetUserId).read[String]
+  ) tupled
+  def borrow = AuthenticatedAction { implicit request => implicit user =>
+    request.body.asJson match {
+      case Some(json) =>
+        borrowReader.reads(json) match {
+          case JsSuccess((isbn, targetUserId), _) =>
+            Async {
+              user.borrowToUser(isbn, targetUserId).map { _ =>
+                Ok("")
+              }.recover {
+                case BorrowException(msg) => BadRequest(msg)
+              }
+            }
+          case JsError(errors) => BadRequest(s"Bad content: $errors")
+        }
+      case None => BadRequest("Missing content")
+    }
   }
 
   def render = {
