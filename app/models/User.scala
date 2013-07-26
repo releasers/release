@@ -27,8 +27,28 @@ case class Profile(
 
 case class Loanable(
   isbn: String,
+  addedDate: DateTime,
   borrower: Option[BSONObjectID],
   borrowedSince: Option[DateTime])
+
+case class SuggestionVote(
+  who: BSONObjectID,
+  when: DateTime)
+
+object SuggestionVote {
+  implicit val formater = Json.format[SuggestionVote]
+}
+
+case class Suggestion(
+  isbn: String,
+  addedDate: DateTime,
+  origin: BSONObjectID,
+  approved: Seq[SuggestionVote],
+  disapproved: Seq[SuggestionVote])
+
+object Suggestion {
+  implicit val formater = Json.format[Suggestion]
+}
 
 object Loanable {
   implicit val formater = Json.format[Loanable]
@@ -37,8 +57,9 @@ object Loanable {
 case class User(
     _id: BSONObjectID,
     profile: Profile,
-    books: Seq[Loanable]
-    ) {
+    suggestions: Seq[Suggestion],
+    books: Seq[Loanable],
+    queue: Seq[Loanable]) {
   lazy val id = _id.stringify
 }
 
@@ -63,7 +84,9 @@ object User {
     User(
       _id = BSONObjectID.generate,
       profile = profile,
-      books = Nil)
+      suggestions = Nil,
+      books = Nil,
+      queue = Nil)
   }
 
   def createOrMerge(profile: Profile): Future[User] = {
