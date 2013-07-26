@@ -93,8 +93,9 @@ object Books extends AuthenticatedController[Book] {
             BadRequest(errors.toString)
         }
 
+      }.getOrElse {
+        BadRequest("JSON expected")
       }
-      Ok
     }
   }
 }

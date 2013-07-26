@@ -36,10 +36,9 @@ POST     /api/user/book                          controllers.Users.addBook
 DELETE   /api/user/book/:isbn                    controllers.Users.removeBook(isbn)
 
 GET     /api/books/:isbn                         controllers.Books.findByIsbn(isbn)
-->      /api/books                               controllers.Books
+POST    /api/books                               controllers.Books.addBook
 GET     /api/books/:idBook/comments              controllers.Books.getComments(idBook)
 POST    /api/books/:idBook/comments              controllers.Books.addComment(idBook)
-POST    /api/books                               controllers.Books.addBook
 
 # Analytics (Data visualization)
 GET     /views/analytics                         controllers.Analytics.main
