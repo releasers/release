@@ -33,7 +33,7 @@ GET     /api/oauth2callback                      controllers.Authentication.oaut
 #POST    /api/books/:idBook/comments
 
 # Analytics (Data visualization)
-GET     /analytics                               controllers.Analytics.main
+GET     /views/analytics                         controllers.Analytics.main
 
 
 # Map static resources from the /public folder to the /assets URL path
