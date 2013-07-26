@@ -18,21 +18,8 @@ case class Book (
   @inline def isbn = _id
 }
 
-object Book { 
-  
-  implicit object binaryFormater extends Format[BSONBinary] {
-    def reads(json: JsValue): JsResult[BSONBinary] =
-      json match {
-        case JsString(str) => JsSuccess(BSONBinary(
-          str2Hex(str),
-          Subtype.GenericBinarySubtype
-        ))
-        case _ => JsError("expected string for binary")
-      }
-
-    def writes(bin: BSONBinary): JsValue =
-      JsString(hex2Str(bin.value.readArray(bin.value.readable)))
-  }
+object Book {
 
   implicit val formater = Json.format[Book]
+
 }
