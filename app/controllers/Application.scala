@@ -21,4 +21,8 @@ object Application extends Controller with Authentication {
     Ok("").withNewSession
   }
 
+  def analytics = AuthenticatedAction { implicit request => implicit user =>
+    Ok(views.html.analytics.main())
+  }
+
 }
