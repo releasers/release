@@ -171,6 +171,10 @@ object User {
     collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[User].headOption
   }
 
+  def findAll(): Future[Seq[User]] = {
+    collection.find(Json.obj()).cursor[User].toList
+  }
+
   def findByProfileId(id: String): Future[Option[User]] = {
     collection.find(BSONDocument("profile.id" -> id)).cursor[User].headOption
   }

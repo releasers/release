@@ -17,6 +17,15 @@ import models._
 object Users extends AuthenticatedController[User] {
   val collectionName = "users"
 
+  override def find = AuthenticatedAction { _ => _ =>
+    Async {
+      User.findAll.map { list =>
+        import User.formater
+        Ok(Json.toJson(list))
+      }
+    }
+  }
+
   def list = Action {
     Ok(views.html.users.users())
   }

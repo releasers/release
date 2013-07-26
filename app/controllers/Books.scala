@@ -15,6 +15,15 @@ import org.joda.time.DateTime
 object Books extends AuthenticatedController[Book] {
   val collectionName = "books"
 
+  override def find = AuthenticatedAction { _ => _ =>
+    Async {
+      Book.findAll.map { list =>
+        import Book.formater
+        Ok(Json.toJson(list))
+      }
+    }
+  }
+
   def list = Action {
     Ok(views.html.books.books())
   }

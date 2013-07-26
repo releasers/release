@@ -40,6 +40,10 @@ object Book {
     collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[Book].headOption
   }
 
+  def findAll(): Future[Seq[Book]] = {
+    collection.find(Json.obj()).cursor[Book].toList
+  }
+
   def findAllByIsbns(isbns: Seq[String]): Future[Seq[Book]] = {
     collection.find(BSONDocument("_id" -> BSONDocument("$in" -> isbns))).cursor[Book].toList
   }
