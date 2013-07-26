@@ -47,11 +47,26 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
-  def render = {
-    // decrease/delete a loan
-    // val loan: Loan OR val from: User, val to: Rack
-    // val howMany: Int
-
-    // prepare to send an alert if queue isn't empty
+  val renderReader: Reads[(String, String)] = (
+    (__ \ 'isbn).read[String] and
+    (__ \ 'targetUserId).read[String]
+  ) tupled
+  def render = AuthenticatedAction { implicit request => implicit user =>
+    request.body.asJson match {
+      case Some(json) =>
+        renderReader.reads(json) match {
+          case JsSuccess((isbn,targetUserId), _) =>
+            Async {
+              user.renderToUser(isbn, targetUserId).map { _ =>
+                Ok("")
+              }.recover {
+                case RenderException(msg) => BadRequest(msg)
+              }
+            }
+          case JsError(errors) => BadRequest(s"Bad content: $errors")
+        }
+      case None => BadRequest("Missing content")
+    }
   }
+
 }

@@ -14,6 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.joda.time.DateTime
 
 case class BorrowException(msg: String) extends Throwable(msg)
+case class RenderException(msg: String) extends Throwable(msg)
 
 case class Profile(
   id: String,
@@ -102,6 +103,40 @@ case class User(
     }
   }
 
+def renderFromUser(isbn: String, byUser: User): Future[LastError] = {
+    var success = false  // local var to make code readable
+    var seen = false
+    val updated = books.map { book =>
+      if (success) book
+      else if (book.isbn != isbn) book
+      else if (book.borrower != Some(byUser._id)) book
+      else {
+        success = true
+        book.copy(borrower = None, borrowedSince = None)
+      }
+    }
+    if (success) {
+      import Loanable.formater
+      // prepare to send an alert if queue isn't empty
+      User.collection.update(
+        Json.obj("_id" -> _id),
+        Json.obj("$set" -> Json.obj("books" -> updated))
+      )
+    }
+    else {
+      val msg = s"Can't render the book '$isbn'"
+      Future.failed(RenderException(msg))
+    }
+  }
+
+
+  def renderToUser(isbn: String, targetUserId: String): Future[LastError] = {
+    User.findById(targetUserId).flatMap {
+      case Some(targetUser) => targetUser.renderFromUser(isbn, this)
+      case None =>
+        Future.failed(RenderException(s"Can't render to not-existing user: $targetUserId"))
+    }
+  }
 }
 
 object User {
