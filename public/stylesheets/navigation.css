@@ -19,7 +19,7 @@ ol#navigation {
   bottom: 0;
   margin: 0;
   padding: 0;
-  width: 5%;
+  width: 75px;
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.15);
 }
 
@@ -76,11 +76,12 @@ ol#navigation li.search form {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 0 4px 4px 0;
   display: none;
-  left: 5em;
+  left: 75px;
   padding: 1em;
   position: absolute;
   top: 0;
   width: 21em;
+  z-index: 1;
 }
 
 ol#navigation li.search:hover form {
