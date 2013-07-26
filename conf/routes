@@ -20,6 +20,7 @@ GET     /api/oauth2callback                      controllers.Authentication.oaut
 
 ->      /api/users                               controllers.Users
 GET     /api/users/:idUser/books                 controllers.Users.listBooks(idUser)
+GET     /api/users/:idUser/loans                 controllers.Users.listLoans(idUser)
 #POST    /api/users/:idUser/books
 #GET     /api/users/:idUser/books/:idBook
 #PUT     /api/users/:idUser/books/:idBook

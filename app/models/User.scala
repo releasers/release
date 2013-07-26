@@ -225,4 +225,23 @@ object User {
     }
   }
 
+  def listLoans(userId: String): Future[JsArray] = {
+    findById(userId).flatMap {
+      case Some(user) => listLoans(user)
+      case None => Future { Json.arr() }
+    }
+  }
+  def listLoans(user: User): Future[JsArray] = {
+    val isbns = user.books.map(_.isbn).toSet.toSeq
+    collection.find(Json.obj("books.borrowerId" -> user._id)).cursor[User].toList.map{ users =>
+      JsArray(users.flatMap { u =>
+        u.books
+         .filter(_.borrowerId == Some(user._id))
+         .map(Json.toJson(_) match {
+            case jso: JsObject => jso ++ Json.obj("userId" -> u._id)
+          })
+      })
+    }
+  }
+
 }
