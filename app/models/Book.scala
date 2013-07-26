@@ -9,13 +9,14 @@ import reactivemongo.bson.Subtype
 import reactivemongo.bson.utils.Converters.{hex2Str, str2Hex}
 
 case class Book (
-  isbn: String,
+  _id: String,
   comments: Seq[Comment],
   title: String,
   description: String,
   picture: Option[BSONBinary]
-  
-)
+) {
+  @inline def isbn = _id
+}
 
 object Book { 
   
