@@ -22,7 +22,7 @@ Sort by:
   </thead>
   <tbody>
     <tr ng-repeat="user in users | filter : query | orderBy:orderProp">
-        <td><a href="/users/{{user.profile.id}}">{{user.profile.name}}</a></td>
+        <td><a href="/users/{{user._id.$oid}}">{{user.profile.name}}</a></td>
         <td><a href="mailto:{{user.profile.email}}">{{user.profile.email}}</a></td>
         <td>{{user.profile.verifiedEmail}}</td>
         <td>{{user.profile.gender | uppercase}}</td>
