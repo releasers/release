@@ -48,7 +48,7 @@ object Users extends AuthenticatedController[User] {
   def loan(targetUserId: String) = AuthenticatedAction { implicit request => implicit user =>
     request.body.asJson match {
       case Some(json) =>
-        borrowReader.reads(json) match {
+        loanReader.reads(json) match {
           case JsSuccess(isbn, _) =>
             Async {
               user.borrowFromUser(isbn, targetUserId).map { _ =>
