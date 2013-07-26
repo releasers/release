@@ -1,4 +1,4 @@
-@()
+@()(implicit user: User)
 
 @import play.api.Play
 @import play.api.Play.current
@@ -23,6 +23,13 @@
     <body>
       <div id="view" ui-view></div>
 
+      <script>
+        var userProfile = @Html({
+          import play.api.libs.json.Json
+          import User.profileFormater
+          Json.stringify(Json.toJson(user.profile))
+        })
+      </script>
       <hr/>
       <h3>Debug</h3>
       <ul>
