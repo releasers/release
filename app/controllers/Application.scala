@@ -34,4 +34,10 @@ object Application extends Controller with Authentication {
     }
   }
 
+  def searchOL(pattern: String) = Action {
+    Async {
+      OpenLibrary.bookSearch(pattern).map(books => Ok(Json.toJson(books.take(10))))
+    }
+  }
+
 }

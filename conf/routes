@@ -36,7 +36,8 @@ POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
 #POST    /api/books/:idBook/comments
 
 # Test urls
-GET     /api/test/openlibrary/:isbn                  controllers.Application.openLibraryInfo(isbn)
+GET     /api/test/openlibrary/isbn/:isbn                  controllers.Application.openLibraryInfo(isbn)
+GET     /api/test/openlibrary/seach/:pattern                  controllers.Application.searchOL(pattern)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                            controllers.Assets.at(path="/public", file)

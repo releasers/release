@@ -1,6 +1,6 @@
 app.factory("Books", ["Restangular", function (Restangular) {
   function search(pattern) {
-    return Restangular.one("test/openlibrary", "ISBN:" + pattern).doGET()
+    return Restangular.one("test/openlibrary/seach", pattern).doGET()
   }
 
   function list () {
