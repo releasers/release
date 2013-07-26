@@ -17,16 +17,18 @@ Sort by:
         <th>Gender</th>
         <th>Birthday</th>
         <th>Locale</th>
+        <th>G+ page</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="user in users | filter : query | orderBy:orderProp">
-        <td><a href="{{user.profile.link}}">{{user.profile.name}}</a></td>
+        <td><a href="/users/{{user.profile.id}}">{{user.profile.name}}</a></td>
         <td><a href="mailto:{{user.profile.email}}">{{user.profile.email}}</a></td>
         <td>{{user.profile.verifiedEmail}}</td>
         <td>{{user.profile.gender | uppercase}}</td>
         <td>{{user.profile.birthday | date}}</td>
         <td>{{user.profile.locale | uppercase}}</td>
+        <td><a href="{{user.profile.link}}"><img class="profile-picture" src="{{user.profile.picture}}"></a></td>
     </tr>
   </tdody>
 </table>
