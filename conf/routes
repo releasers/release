@@ -36,6 +36,9 @@ POST     /api/user/book                          controllers.Users.addBook
 GET     /api/books/:idBook/comments              controllers.Books.getComments(idBook)
 POST    /api/books/:idBook/comments             controllers.Books.addComment(idBook)
 
+# Analytics (Data visualization)
+GET     /views/analytics                         controllers.Analytics.main
+
 # Test urls
 GET     /api/test/openlibrary/isbn/:isbn                  controllers.Application.openLibraryInfo(isbn)
 GET     /api/test/openlibrary/seach/:pattern                  controllers.Application.searchOL(pattern)

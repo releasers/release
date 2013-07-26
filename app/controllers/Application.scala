@@ -45,4 +45,9 @@ object Application extends Controller with Authentication {
       }
     }
   }
+
+  def analytics = AuthenticatedAction { implicit request => implicit user =>
+    Ok(views.html.analytics.main())
+  }
+
 }
