@@ -33,9 +33,10 @@ POST     /api/user/:idUser/render                controllers.Users.render(idUser
 POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
 POST     /api/user/book                          controllers.Users.addBook
 
+GET     /api/books/:isbn                         controllers.Books.findByIsbn(isbn)
 ->      /api/books                               controllers.Books
 GET     /api/books/:idBook/comments              controllers.Books.getComments(idBook)
-POST    /api/books/:idBook/comments             controllers.Books.addComment(idBook)
+POST    /api/books/:idBook/comments              controllers.Books.addComment(idBook)
 
 # Analytics (Data visualization)
 GET     /views/analytics                         controllers.Analytics.main

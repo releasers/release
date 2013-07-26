@@ -24,6 +24,15 @@ object Books extends AuthenticatedController[Book] {
     }
   }
 
+  def findByIsbn(isbn: String) = AuthenticatedAction { _ => _ =>
+    Async {
+      Book.findById(isbn).map { book =>
+        import Book.formater
+        Ok(Json.toJson(book))
+      }
+    }
+  }
+
   def list = Action {
     Ok(views.html.books.books())
   }
