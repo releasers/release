@@ -32,7 +32,7 @@ case class Profile(
 case class Loanable(
   isbn: String,
   addedDate: DateTime,
-  borrower: Option[BSONObjectID],
+  borrowerId: Option[BSONObjectID],
   borrowedSince: Option[DateTime])
 
 case class SuggestionVote(
@@ -74,9 +74,9 @@ case class User(
       else if (book.isbn != isbn) book
       else {
         seen = true
-        if (book.borrower.isEmpty) {
+        if (book.borrowerId.isEmpty) {
           success = true
-          book.copy(borrower = Some(byUser._id), borrowedSince = Some(DateTime.now))
+          book.copy(borrowerId = Some(byUser._id), borrowedSince = Some(DateTime.now))
         }
         else book
       }
@@ -109,10 +109,10 @@ def renderFromUser(isbn: String, byUser: User): Future[LastError] = {
     val updated = books.map { book =>
       if (success) book
       else if (book.isbn != isbn) book
-      else if (book.borrower != Some(byUser._id)) book
+      else if (book.borrowerId != Some(byUser._id)) book
       else {
         success = true
-        book.copy(borrower = None, borrowedSince = None)
+        book.copy(borrowerId = None, borrowedSince = None)
       }
     }
     if (success) {
