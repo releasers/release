@@ -18,6 +18,7 @@ POST    /api/logout                              controllers.Authentication.logo
 GET     /api/oauth2callback                      controllers.Authentication.oauth2callback
 #GET     /api/goodreads/callback
 
+GET     /api/users/:idUser                       controllers.Users.get(idUser)
 ->      /api/users                               controllers.Users
 GET     /api/users/:idUser/books                 controllers.Users.listBooks(idUser)
 GET     /api/users/:idUser/loans                 controllers.Users.listLoans(idUser)

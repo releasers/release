@@ -26,6 +26,15 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
+  def get(id: String) = AuthenticatedAction { _ => _ =>
+    Async {
+      User.findById(id).map { user =>
+        import User.formater
+        Ok(Json.toJson(user))
+      }
+    }
+  }
+
   def list = Action {
     Ok(views.html.users.users())
   }
