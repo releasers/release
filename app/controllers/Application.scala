@@ -5,7 +5,9 @@ import play.api.mvc._
 import openlibrary.OpenLibrary
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.json.Json
+import play.api.libs.json._
+import play.api.cache.Cached
+import play.api.Play.current
 
 object Application extends Controller with Authentication {
 
@@ -34,10 +36,13 @@ object Application extends Controller with Authentication {
     }
   }
 
-  def searchOL(pattern: String) = Action {
-    Async {
-      OpenLibrary.bookSearch(pattern).map(books => Ok(Json.toJson(books.take(10))))
+  def searchOL(pattern: String) = Cached("pattern." + pattern) {
+    Action {
+      Async {
+        OpenLibrary.bookSearch(pattern) map { books =>
+          Ok(Json.toJson(books.take(10)))
+        }
+      }
     }
   }
-
 }
