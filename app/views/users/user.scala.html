@@ -21,11 +21,12 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="book in user.books">
+    <tr ng-class="book.borrowerId ? 'borrowed' : ''" ng-repeat="book in user.books">
         <td><a href="/books/{{book.isbn}}">{{book.isbn}}</a></td>
         <td>{{book.addedDate | date}}</td>
         <td><a href="/users/{{book.borrowerId}}">{{book.borrowerId}}</a></td>
         <td>{{book.borrowedSince | date}}</td>
+
     </tr>
   </tdody>
 </table>

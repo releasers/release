@@ -12,6 +12,7 @@ app.factory("Books", ["Restangular", function (Restangular) {
   }
 
   function findById (id) {
+    return Restangular.one("books", id).get();
 
   }
 
