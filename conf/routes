@@ -33,8 +33,8 @@ POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
 POST     /api/user/book                          controllers.Users.addBook
 
 ->      /api/books                               controllers.Books
-#GET     /api/books/:idBook/comments              controllers.Books.
-#POST    /api/books/:idBook/comments
+GET     /api/books/:idBook/comments              controllers.Books.getComments(idBook)
+POST    /api/books/:idBook/comments             controllers.Books.addComment(idBook)
 
 # Test urls
 GET     /api/test/openlibrary/isbn/:isbn                  controllers.Application.openLibraryInfo(isbn)
