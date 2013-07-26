@@ -1,3 +1,50 @@
 @()
 
-<h1>One user</h1>
+<span style="float:right; margin-right:10%;">
+  <a href="{{user.profile.link}}" target="_blank"><img class="full-profile-picture" src="{{user.profile.picture}}"></a>
+</span>
+<h1>{{user.profile.name}}'s page</h1>
+<ul>
+  <li>Email : {{user.profile.email}}</li>
+  <li>Email verified : {{user.profile.verifiedEmail}}</li>
+  <li>Gender : {{user.profile.gender}}</li>
+  <li>Birthday : {{user.profile.birthday | date}}</li>
+</ul>
+<h2>Books</h2>
+<table>
+  <thead>
+    <tr>
+        <th>ISBN</th>
+        <th>Added date</th>
+        <th>Borrower</th>
+        <th>Borrowed since</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="book in user.books">
+        <td><a href="/books/{{book.isbn}}">{{book.isbn}}</a></td>
+        <td>{{book.addedDate | date}}</td>
+        <td><a href="/users/{{book.borrowerId}}">{{book.borrowerId}}</a></td>
+        <td>{{book.borrowedSince | date}}</td>
+    </tr>
+  </tdody>
+</table>
+<h2>Suggestions</h2>
+<table>
+  <thead>
+    <tr>
+        <th>ISBN</th>
+        <th>Added date</th>
+        <th>Approved number</th>
+        <th>Disapproved number</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="suggestion in user.suggestions">
+        <td><a href="/books/{{suggestion.isbn}}">{{suggestion.isbn}}</a></td>
+        <td>{{suggestion.addedDate | date}}</td>
+        <td>{{suggestion.approved.length}}</td>
+        <td>{{suggestion.disapproved.length}}</td>
+    </tr>
+  </tdody>
+</table>
