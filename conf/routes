@@ -32,6 +32,7 @@ POST     /api/user/:idUser/borrow                controllers.Users.borrow(idUser
 POST     /api/user/:idUser/render                controllers.Users.render(idUser)
 POST     /api/user/:idUser/loan                  controllers.Users.loan(idUser)
 POST     /api/user/book                          controllers.Users.addBook
+DELETE   /api/user/book/:isbn                    controllers.Users.removeBook(isbn)
 
 GET     /api/books/:isbn                         controllers.Books.findByIsbn(isbn)
 ->      /api/books                               controllers.Books

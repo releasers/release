@@ -16,6 +16,7 @@ import org.joda.time.DateTime
 case class BorrowException(msg: String) extends Throwable(msg)
 case class RenderException(msg: String) extends Throwable(msg)
 case class AddBookException(msg: String) extends Throwable(msg)
+case class RemoveBookException(msg: String) extends Throwable(msg)
 
 case class Profile(
   id: String,
@@ -154,6 +155,19 @@ def renderFromUser(isbn: String, byUserId: BSONObjectID): Future[LastError] = {
           Json.obj("_id" -> _id),
           Json.obj("$set" -> Json.obj("books" -> updated))
         ) 
+    }
+  }
+
+  def removeBook(isbn:String) : Future[LastError] = {
+    val (head,tail) = books.span(_.isbn != isbn)
+    if(tail.isEmpty) Future.failed(RemoveBookException(s"Can't remove not-existing book: $isbn"))
+    else {
+      val updated = head ++ tail.drop(1)
+
+      User.collection.update(
+        Json.obj("_id" -> _id),
+        Json.obj("$set" -> Json.obj("books" -> updated))
+      )
     }
   }
 }

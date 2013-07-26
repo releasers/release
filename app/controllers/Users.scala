@@ -121,10 +121,21 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
+
   def listLoans(targetUserId: String) = AuthenticatedAction { implicit request => implicit user =>
     Async {
       User.listLoans(targetUserId).map { books =>
         Ok(books)
+      }
+    }
+  }
+  
+  def removeBook(isbn: String) = AuthenticatedAction { implicit request => implicit user =>
+    Async {
+      user.removeBook(isbn).map { _ =>
+        Ok("")
+      }.recover {
+        case RemoveBookException(msg) => BadRequest(msg)
       }
     }
   }
