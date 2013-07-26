@@ -50,4 +50,12 @@ var app = angular.module("app",
       $rootScope.$location = $location;
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
+
+      $rootScope.globalSearch = {}
+      if($stateParams.pattern) {
+        $rootScope.globalSearch.pattern = $stateParams.pattern
+      }
+      $rootScope.search = function() {
+        $location.path("/books").search("pattern", $rootScope.globalSearch.pattern)
+      };
   }]);

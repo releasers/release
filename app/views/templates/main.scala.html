@@ -40,6 +40,14 @@
             <li><a href="/books">Books</a></li>
             <li><a href="/users">Users</a></li>
           </ul>
+          <form class="navbar-form pull-right" ng-submit="search()">
+            <div class="input-group">
+             <input type="text" class="form-control" style="width: 200px;" name="pattern" ng-model="globalSearch.pattern">
+             <span class="input-group-btn">
+               <button class="btn btn-default" type="submit">Go!</button>
+             </span>
+            </div>
+          </form>
          </div><!-- /.nav-collapse -->
        </div><!-- /.container -->
       </div><!-- /.navbar -->
