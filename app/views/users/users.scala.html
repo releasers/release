@@ -1,3 +1,22 @@
 @()
 
 <h1>List of users</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Verified email ?</th>
+        <th>Gender</th>
+        <th>Birthday</th>
+        <th>Locale</th>
+    </tr>
+    <tr ng-repeat="user in users">
+        <td><a href="{{user.profile.link}}">{{user.profile.name}}</a></td>
+        <td><a href="mailto:{{user.profile.email}}">{{user.profile.email}}</a></td>
+        <td>{{user.profile.verifiedEmail}}</td>
+        <td>{{user.profile.gender | uppercase}}</td>
+        <td>{{user.profile.birthday | date}}</td>
+        <td>{{user.profile.locale | uppercase}}</td>
+    </tr>
+  </li>
+</table>
