@@ -16,6 +16,7 @@ GET     /views/books/detail                      controllers.Books.detail
 POST    /api/login                               controllers.Authentication.login
 POST    /api/logout                              controllers.Authentication.logout
 GET     /api/oauth2callback                      controllers.Authentication.oauth2callback
+#GET     /api/goodreads/callback
 
 ->      /api/users                               controllers.Users
 #GET     /api/users/:idUser/books
