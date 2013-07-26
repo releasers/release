@@ -36,7 +36,7 @@ var app = angular.module("app",
         templateUrl: "/views/books/list"
       })
       .state("book", {
-        url: "/books/{id}",
+        url: "/book/{id}",
         controller: "BookCtrl",
         templateUrl: "/views/books/detail"
       });

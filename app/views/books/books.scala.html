@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="book in books">
-      <td>{{book.titre}}</td>
+      <td><a ng-href="/book/{{book.isbn}}">{{book.titre}}</a></td>
       <td>{{book.isbn}}</td>
       <td>{{book.resume}}</td>
       <td><img ng-src="{{book.imageUrl}}"></td>
