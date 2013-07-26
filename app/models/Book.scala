@@ -36,8 +36,12 @@ object Book {
   val collectionName = "books"
   val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
 
-  def findById(id: String): Future[Option[User]] = {
-    collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[User].headOption
+  def findById(id: String): Future[Option[Book]] = {
+    collection.find(BSONDocument("_id" -> BSONObjectID(id))).cursor[Book].headOption
+  }
+
+  def findAllByIsbns(isbns: Seq[String]): Future[Seq[Book]] = {
+    collection.find(BSONDocument("_id" -> BSONDocument("$in" -> isbns))).cursor[Book].toList
   }
 
 }

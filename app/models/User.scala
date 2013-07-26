@@ -181,4 +181,28 @@ object User {
     }
   }
 
+  def listBooks(userId: String): Future[JsArray] = {
+    findById(userId).flatMap {
+      case Some(user) => listBooks(user)
+      case None => Future { Json.arr() }
+    }
+  }
+  def listBooks(user: User): Future[JsArray] = {
+    val isbns = user.books.map(_.isbn).toSet.toSeq
+    Book.findAllByIsbns(isbns).map { realBooks =>
+      val booksMap = realBooks.foldLeft(Map.empty[String, Book]){ case (books, book) =>
+        books + (book.isbn -> book)
+      }
+      val books = user.books.map{ book =>
+        Json.toJson(book) match {
+          case jso: JsObject =>
+            jso ++ Json.obj(
+              "book" -> booksMap.get(book.isbn)
+            )
+        }
+      }
+      JsArray(books)
+    }
+  }
+
 }

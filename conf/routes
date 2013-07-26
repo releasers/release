@@ -19,7 +19,7 @@ GET     /api/oauth2callback                      controllers.Authentication.oaut
 #GET     /api/goodreads/callback
 
 ->      /api/users                               controllers.Users
-#GET     /api/users/:idUser/books
+GET     /api/users/:idUser/books                 controllers.Users.listBooks(idUser)
 #POST    /api/users/:idUser/books
 #GET     /api/users/:idUser/books/:idBook
 #PUT     /api/users/:idUser/books/:idBook

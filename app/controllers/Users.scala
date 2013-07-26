@@ -82,4 +82,12 @@ object Users extends AuthenticatedController[User] {
     }
   }
 
+  def listBooks(targetUserId: String) = AuthenticatedAction { implicit request => implicit user =>
+    Async {
+      User.listBooks(targetUserId).map { books =>
+        Ok(books)
+      }
+    }
+  }
+
 }
