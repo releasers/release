@@ -52,6 +52,13 @@ trait Authentication {
       Iteratee.flatten(futureIteratee)
     }
   }
+
+  def AuthenticatedAction(result: Request[AnyContent] => User => Result): EssentialAction = Authenticated { user =>
+    Action { request =>
+      result(request)(user)
+    }
+  }
+
 }
 
 object Authentication extends Controller {
