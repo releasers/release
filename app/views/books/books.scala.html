@@ -17,8 +17,8 @@
       <td>{{book.description}}</td>
       <td><img ng-src="{{book.pictureUrl}}"></td>
       <th>
-        <a ng-href="/books/{{book.isbn}}/users">Emprunter</a>
-        <button ng-click="add(book.isbn)">Ajouter</button>
+        <a class="btn btn-primary" ng-href="/books/{{book.isbn}}/users">Emprunter</a>
+        <button class="btn btn-default" ng-click="add(book.isbn)">Ajouter</button>
       </th>
     </tr>
   </tbody>
